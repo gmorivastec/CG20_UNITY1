@@ -1,10 +1,12 @@
 // shader lab code specific to unity
-Shader "ClassShaders/Basic" {
+Shader "ClassShaders/Phong" {
 
     // you can add parameters that can be modified through the editor
     Properties {
         _AmbientMaterial("Ambient Color", Color) = (1, 1, 1, 1)
         _DiffuseMaterial("Diffuse Color", Color) = (1, 1, 1, 1)
+        _SpecularMaterial("Specular Material", Color) = (1, 1, 1, 1)
+        _Shininess("Shininess", Float) = 100
     }
 
     SubShader { // you can have different subshaders so unity decides which one to use
@@ -24,6 +26,8 @@ Shader "ClassShaders/Basic" {
 
             uniform float4 _AmbientMaterial;
             uniform float4 _DiffuseMaterial;
+            uniform float4 _SpecularMaterial;
+            uniform float _Shininess;
             uniform float4 _LightColor0;
 
             // to send / receive several values in the shader 
@@ -36,9 +40,10 @@ Shader "ClassShaders/Basic" {
             };
 
             struct vertexOutput {
-
+                
                 float4 position : SV_POSITION;
                 float3 normal : NORMAL;
+                float4 vertex : TEXCOORD1;
             };
 
             // declare the vertex shader
@@ -55,6 +60,7 @@ Shader "ClassShaders/Basic" {
                 result.position = UnityObjectToClipPos(input.vertexPos);
                 // normal is a vector pointing "outwards"
                 result.normal = input.normal; 
+                result.vertex = input.vertexPos;
 
                 return result;
             }
@@ -93,6 +99,27 @@ Shader "ClassShaders/Basic" {
                 float4 diffuse = _DiffuseMaterial * i * max(0.0, dot(lm, n));
 
                 // SPECULAR LIGHTING
+
+                // ks * i * (R . V)a
+                float4 ks = _SpecularMaterial;
+
+                // calculating R
+                // R represents the perfect reflection of the light
+                // when hitting this point
+                float3 r = reflect(-lm, n);
+
+                // calculating V
+                // V is a vector that goes from the current point
+                // to the camera
+                // WE NEED:
+                // 1. get the point in world space
+                
+                // 2. get the position of camera
+                float3 camera = _WorldSpaceCameraPos;
+
+                // 3. get the vector that points from the vertex to the camera
+                
+
                 float4 specular = float4(0, 0, 0, 0);
 
                 // return float4(0.0, 1.0, 0.0, 1.0);
