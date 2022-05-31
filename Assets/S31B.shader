@@ -1,5 +1,5 @@
 // shader lab code specific to unity
-Shader "ClassShaders/Phong" {
+Shader "ClassShaders/Activity S.3.1.B" {
 
     // you can add parameters that can be modified through the editor
     Properties {
@@ -102,7 +102,6 @@ Shader "ClassShaders/Phong" {
 
                 // ks * i * (R . V)a
                 float4 ks = _SpecularMaterial;
-                float a = _Shininess;
 
                 // calculating R
                 // R represents the perfect reflection of the light
@@ -114,18 +113,29 @@ Shader "ClassShaders/Phong" {
                 // to the camera
                 // WE NEED:
                 // 1. get the point in world space
-                float3 vertexGlobal = mul(unity_ObjectToWorld, input.vertex).xyz;
                 
                 // 2. get the position of camera
                 float3 camera = _WorldSpaceCameraPos;
 
                 // 3. get the vector that points from the vertex to the camera
-                float3 v = normalize(camera - vertexGlobal);
+                
 
-                float4 specular = ks * i * pow(max(0.0, dot(r, v)), a);
+                float4 specular = float4(0, 0, 0, 0);
 
                 // return float4(0.0, 1.0, 0.0, 1.0);
-                return ambient + diffuse + specular;        
+                float4 result = ambient + diffuse + specular;
+
+                // grayscale
+                // commonly used to determine amount of "light" in a point
+                // (how dark or light is)
+
+                // grayscale means same amount of r, g and b
+                float average = (result.r + result.g + result.b) / 3;
+
+                if(average < 0.5)
+                    return float4(0, 0, 0, 1);
+                 
+                return float4(1, 1, 1, 1);     
             }
 
             ENDCG

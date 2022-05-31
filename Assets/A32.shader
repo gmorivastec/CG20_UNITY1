@@ -1,5 +1,5 @@
 // shader lab code specific to unity
-Shader "ClassShaders/Phong" {
+Shader "ClassShaders/Activity S.3.2" {
 
     // you can add parameters that can be modified through the editor
     Properties {
@@ -7,6 +7,8 @@ Shader "ClassShaders/Phong" {
         _DiffuseMaterial("Diffuse Color", Color) = (1, 1, 1, 1)
         _SpecularMaterial("Specular Material", Color) = (1, 1, 1, 1)
         _Shininess("Shininess", Float) = 100
+        _FirstCut("First Cut", Float) = 0.33
+        _SecondCut("Second Cut", Float) = 0.66
     }
 
     SubShader { // you can have different subshaders so unity decides which one to use
@@ -29,6 +31,8 @@ Shader "ClassShaders/Phong" {
             uniform float4 _SpecularMaterial;
             uniform float _Shininess;
             uniform float4 _LightColor0;
+            uniform float _FirstCut;
+            uniform float _SecondCut;
 
             // to send / receive several values in the shader 
             // we need structs 
@@ -102,7 +106,6 @@ Shader "ClassShaders/Phong" {
 
                 // ks * i * (R . V)a
                 float4 ks = _SpecularMaterial;
-                float a = _Shininess;
 
                 // calculating R
                 // R represents the perfect reflection of the light
@@ -114,18 +117,32 @@ Shader "ClassShaders/Phong" {
                 // to the camera
                 // WE NEED:
                 // 1. get the point in world space
-                float3 vertexGlobal = mul(unity_ObjectToWorld, input.vertex).xyz;
                 
                 // 2. get the position of camera
                 float3 camera = _WorldSpaceCameraPos;
 
                 // 3. get the vector that points from the vertex to the camera
-                float3 v = normalize(camera - vertexGlobal);
+                
 
-                float4 specular = ks * i * pow(max(0.0, dot(r, v)), a);
+                float4 specular = float4(0, 0, 0, 0);
 
                 // return float4(0.0, 1.0, 0.0, 1.0);
-                return ambient + diffuse + specular;        
+                float4 result = ambient + diffuse + specular;
+
+                // grayscale
+                // commonly used to determine amount of "light" in a point
+                // (how dark or light is)
+
+                // grayscale means same amount of r, g and b
+                float average = (result.r + result.g + result.b) / 3;
+
+                if(average <= _FirstCut)
+                    return _AmbientMaterial * 0.4;
+
+                if(average <= _SecondCut)
+                    return _AmbientMaterial * 0.5;
+
+                return _AmbientMaterial;
             }
 
             ENDCG
