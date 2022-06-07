@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MyMaterial
-  m_Shader: {fileID: 4800000, guid: 9eff66e7d7a7eca949d44819a89736c1, type: 3}
+  m_Shader: {fileID: 4800000, guid: 315b25025453165e4a820ee1f5bb5d34, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -70,7 +70,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _FirstCut: 0.15
+    - _FirstCut: 0.25
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
@@ -78,12 +78,13 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _SecondCut: 0.66
+    - _SecondCut: 0.5
     - _Shininess: 50
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
+    - _Width: 0.02
     - _ZWrite: 1
     m_Colors:
     - _AmbientMaterial: {r: 1, g: 1, b: 1, a: 1}
